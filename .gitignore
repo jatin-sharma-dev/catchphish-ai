@@ -1,0 +1,27 @@
+# Python environment & cache files
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment variables & secrets (Crucial for security)
+.env
+.env.local
+
+# Machine Learning Data (Prevents GitHub 100MB size limit crash)
+data/raw/
+data/*.csv
+*.csv
+
+# OS & IDE specific files
+.DS_Store
+.vscode/
+.idea/
+
+# macOS temp files
+._*
+.Spotlight-V100
+.Trashes

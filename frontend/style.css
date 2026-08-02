@@ -1,0 +1,147 @@
+/* Ambient Background Upgrades */
+.grid-field {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+    -webkit-mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, black 0%, transparent 70%);
+    mask-image: radial-gradient(ellipse 80% 50% at 50% 0%, black 0%, transparent 70%);
+}
+
+.glow-orb {
+    position: absolute;
+    top: -10%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60vw;
+    height: 500px;
+    background: radial-gradient(circle, rgba(56,189,248,0.10) 0%, rgba(167,127,255,0.06) 45%, rgba(10,19,36,0) 70%);
+    pointer-events: none;
+}
+
+/* Signature element: a slow scanning sweep, evoking the act of scanning an email */
+.scan-sweep {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(56,189,248,0.6), rgba(167,127,255,0.6), transparent);
+    box-shadow: 0 0 12px rgba(56,189,248,0.4);
+    animation: sweepDown 6s ease-in-out infinite;
+    opacity: 0.7;
+}
+
+@keyframes sweepDown {
+    0%   { top: 0%; opacity: 0; }
+    10%  { opacity: 0.7; }
+    50%  { top: 55%; opacity: 0.5; }
+    90%  { opacity: 0.7; }
+    100% { top: 100%; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scan-sweep { animation: none; display: none; }
+    .reveal { animation: none; opacity: 1; transform: none; }
+}
+
+/* Reveal Animations */
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease-out forwards;
+}
+.reveal-1 { animation-delay: 0.1s; }
+.reveal-2 { animation-delay: 0.2s; }
+.reveal-3 { animation-delay: 0.3s; }
+.reveal-4 { animation-delay: 0.4s; }
+
+@keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Benchmark Stat Grid */
+.stat-cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.75rem 1rem 1.5rem;
+    text-align: center;
+    overflow: hidden;
+}
+
+.stat-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    opacity: 0.8;
+}
+
+.stat-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.6rem;
+}
+
+.stat-label {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #cbd5e1;
+    line-height: 1.5;
+}
+
+.stat-sub {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 400;
+    text-transform: none;
+    letter-spacing: 0.02em;
+    color: #64748b;
+    margin-top: 0.15rem;
+}
+
+/* Status Indicator Pulse */
+@keyframes pulseStatus {
+    0%, 100% { opacity: 0.5; box-shadow: 0 0 0 rgba(16, 185, 129, 0); }
+    50% { opacity: 1; box-shadow: 0 0 10px rgba(16, 185, 129, 0.8); }
+}
+.status-online {
+    background-color: #10B981 !important;
+    animation: pulseStatus 2s infinite ease-in-out;
+}
+.status-offline {
+    background-color: #EF4444 !important;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #050912;
+}
+::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #38BDF8;
+}
+
+/* Utility to override hidden gracefully */
+.hidden {
+    display: none !important;
+}
