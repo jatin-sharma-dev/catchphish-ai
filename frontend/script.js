@@ -1,4 +1,4 @@
-const API_BASE = 'http://127.0.0.1:8000'; // FastAPI Backend
+const API_BASE = 'https://catchphish-ai.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
     
