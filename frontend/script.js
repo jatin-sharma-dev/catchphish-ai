@@ -1,5 +1,5 @@
-const API_BASE = 'https://catchphish-ai.onrender.com';
-
+// const API_BASE = 'http://127.0.0.1:8000'; // FastAPI Backend local-env
+const API_BASE = 'https://catchphish-api.onrender.com'; // Fastrack Backend for render
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. View Switching Logic ---
@@ -34,11 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!res.ok) throw new Error();
             liveDot.className = 'w-2 h-2 rounded-full status-online';
             liveLabel.textContent = 'API ONLINE';
-            liveLabel.style.color = '#10B981';
+            liveLabel.style.color = '#16A34A';
         } catch {
             liveDot.className = 'w-2 h-2 rounded-full status-offline';
             liveLabel.textContent = 'API UNREACHABLE';
-            liveLabel.style.color = '#EF4444';
+            liveLabel.style.color = '#E11D48';
         }
     }
     checkHealth();
@@ -61,24 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const SCAN_BTN_DEFAULT = `<i class="fa-solid fa-magnifying-glass"></i> <span>Scan Email</span>`;
     const SCAN_BTN_LOADING = `<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Scanning...</span>`;
 
-    // --- 4. Sample Loaders ---
-    document.getElementById('samplePhishBtn').addEventListener('click', () => {
-        emailInput.value = "URGENT: Your bank account has been suspended due to unauthorized login attempts. Click the secure link below to verify your password and claim your identity immediately. http://secure-update-account.com/login";
-    });
-
-    document.getElementById('sampleSafeBtn').addEventListener('click', () => {
-        emailInput.value = "Hi team, Just a quick reminder that our weekly engineering sync is scheduled for 3 PM tomorrow. I've attached the agenda to this thread. Let me know if you need to add anything. Thanks!";
-    });
-
-    // --- 5. Reset Action ---
+    // --- 4. Reset Action ---
     resetBtn.addEventListener('click', () => {
         emailInput.value = '';
         analysisDashboard.classList.add('hidden');
         emptyState.classList.remove('hidden');
-        resultsContainer.style.borderColor = '#1e293b'; // reset border
+        resultsContainer.style.borderColor = ''; // reset border to default card border
     });
 
-    // --- 6. API Interaction & Visualization ---
+    // --- 5. API Interaction & Visualization ---
     scanBtn.addEventListener('click', async () => {
         const text = emailInput.value.trim();
         if (!text) {
@@ -118,11 +109,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Apply Dynamic Risk Colors
             let themeColor, bgClass, borderClass, textClass;
             if (data.risk_level === 'Critical') {
-                themeColor = '#EF4444'; bgClass = 'bg-critical/10'; borderClass = 'border-critical/30'; textClass = 'text-critical';
+                themeColor = '#E11D48'; bgClass = 'bg-critical/10'; borderClass = 'border-critical/30'; textClass = 'text-critical';
             } else if (data.risk_level === 'Suspicious') {
-                themeColor = '#F59E0B'; bgClass = 'bg-warn/10'; borderClass = 'border-warn/30'; textClass = 'text-warn';
+                themeColor = '#D97706'; bgClass = 'bg-warn/10'; borderClass = 'border-warn/30'; textClass = 'text-warn';
             } else {
-                themeColor = '#10B981'; bgClass = 'bg-safe/10'; borderClass = 'border-safe/30'; textClass = 'text-safe';
+                themeColor = '#16A34A'; bgClass = 'bg-safe/10'; borderClass = 'border-safe/30'; textClass = 'text-safe';
             }
 
             scoreGauge.style.stroke = themeColor;
@@ -136,10 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
             flaggedWordsContainer.innerHTML = '';
             if (data.flagged_words && data.flagged_words.length > 0) {
                 data.flagged_words.forEach(word => {
-                    flaggedWordsContainer.innerHTML += `<span class="px-3 py-1 bg-slate-800 border border-slate-700 rounded text-xs font-mono text-slate-300 shadow-sm">${word}</span>`;
+                    flaggedWordsContainer.innerHTML += `<span class="px-3 py-1 bg-bgbase border border-ink/10 rounded-lg text-xs font-mono text-ink/70 shadow-sm">${word}</span>`;
                 });
             } else {
-                flaggedWordsContainer.innerHTML = `<span class="text-xs font-mono text-slate-500">Nothing suspicious found.</span>`;
+                flaggedWordsContainer.innerHTML = `<span class="text-xs font-mono text-ink/40">Nothing suspicious found.</span>`;
             }
 
         } catch (err) {
