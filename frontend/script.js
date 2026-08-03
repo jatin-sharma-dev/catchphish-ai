@@ -1,5 +1,6 @@
 // const API_BASE = 'http://127.0.0.1:8000'; // FastAPI Backend local-env
-const API_BASE = 'https://catchphish-api.onrender.com'; // Fastrack Backend for render
+const API_BASE = 'https://catchphish-ai.onrender.com'; // Fixed URL to match your Render app (-ai)
+
 document.addEventListener('DOMContentLoaded', () => {
     
     // --- 1. View Switching Logic ---
@@ -85,13 +86,14 @@ document.addEventListener('DOMContentLoaded', () => {
         analysisDashboard.classList.add('hidden');
 
         try {
-            const response = await fetch(`${API_BASE}/api/v1/analyze`, {
+            // Updated endpoint to /predict (or adjust to match your main.py route)
+            const response = await fetch(`${API_BASE}/predict`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email_text: text })
             });
 
-            if (!response.ok) throw new Error('API Request Failed');
+            if (!response.ok) throw new Error(`API Request Failed with status ${response.status}`);
             
             const data = await response.json();
             
@@ -107,10 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
             scoreGauge.style.strokeDashoffset = offset;
 
             // Apply Dynamic Risk Colors
+            const riskLevel = data.risk_level || data.risk_category || 'Safe';
             let themeColor, bgClass, borderClass, textClass;
-            if (data.risk_level === 'Critical') {
+            
+            if (riskLevel.toLowerCase().includes('critical')) {
                 themeColor = '#E11D48'; bgClass = 'bg-critical/10'; borderClass = 'border-critical/30'; textClass = 'text-critical';
-            } else if (data.risk_level === 'Suspicious') {
+            } else if (riskLevel.toLowerCase().includes('suspicious') || riskLevel.toLowerCase().includes('moderate')) {
                 themeColor = '#D97706'; bgClass = 'bg-warn/10'; borderClass = 'border-warn/30'; textClass = 'text-warn';
             } else {
                 themeColor = '#16A34A'; bgClass = 'bg-safe/10'; borderClass = 'border-safe/30'; textClass = 'text-safe';
@@ -120,13 +124,15 @@ document.addEventListener('DOMContentLoaded', () => {
             scoreValue.style.color = themeColor;
             resultsContainer.style.borderColor = themeColor; // Glow the whole box
             
-            riskBadge.textContent = data.risk_level;
+            riskBadge.textContent = riskLevel;
             riskBadge.className = `mt-6 font-mono px-6 py-2 rounded-full text-xs font-bold uppercase tracking-widest border ${bgClass} ${borderClass} ${textClass}`;
 
             // Render XAI Flagged Words
             flaggedWordsContainer.innerHTML = '';
-            if (data.flagged_words && data.flagged_words.length > 0) {
-                data.flagged_words.forEach(word => {
+            const keywords = data.flagged_words || data.flagged_keywords || data.flagged_indicators || [];
+            
+            if (keywords.length > 0) {
+                keywords.forEach(word => {
                     flaggedWordsContainer.innerHTML += `<span class="px-3 py-1 bg-bgbase border border-ink/10 rounded-lg text-xs font-mono text-ink/70 shadow-sm">${word}</span>`;
                 });
             } else {
@@ -134,6 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
         } catch (err) {
+            console.error(err);
             alert("Couldn't reach the scanner. Make sure the API server is running.");
             emptyState.classList.remove('hidden');
         } finally {
