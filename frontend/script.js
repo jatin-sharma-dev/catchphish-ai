@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // Updated endpoint to /predict (or adjust to match your main.py route)
-            const response = await fetch(`${API_BASE}/predict`, {
+            const response = await fetch(`${API_BASE}/api/v1/analyze`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email_text: text })
